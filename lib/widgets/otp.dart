@@ -1,9 +1,11 @@
+// ignore_for_file: non_constant_identifier_names, use_build_context_synchronously
+
 import 'dart:convert';
 import 'package:rutvikkalariyatask/utils/color_util.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
-import 'Biomarkers.dart';
+import 'first.dart';
 
 class OtpScreen extends StatefulWidget {
   const OtpScreen({Key? key}) : super(key: key);
@@ -15,34 +17,33 @@ class OtpScreen extends StatefulWidget {
 class _OtpScreenState extends State<OtpScreen> {
   TextEditingController otpController = TextEditingController();
 
-  var otp = [];
-  void OtpVerify() async {
-    var url = Uri.https('');
-    var response = await http.get(
-      url,
-    );
+  void Verifyotp() async {
+    var url = Uri.parse("http://52.58.203.6/staging/api/verify_otp");
+    var response = await http.post(url, body: {
+      "otp": otpController.text,
+    });
 
     print('Response status: ${response.statusCode}');
     print('Response body: ${response.body}');
 
-    otp = json.decode(response.body);
+    var myDataList = json.decode(response.body);
 
     Map<String, dynamic> mymap = json.decode(response.body);
-    otp = mymap["product_list"];
+    myDataList = mymap["data"];
+
+    print(otpController.text);
+
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const FirstScreen(),
+        ));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
-      // appBar: AppBar(
-      //   leading: IconButton(
-      //     onPressed: () {
-      //       Navigator.pop(context);
-      //     },
-      //     icon: Icon(Icons.keyboard_arrow_left, size: 25),
-      //   ),
-      // ),
       body: Center(
         child: SingleChildScrollView(
           child: Column(
@@ -73,11 +74,9 @@ class _OtpScreenState extends State<OtpScreen> {
               ),
               const SizedBox(height: 20),
               InkWell(
-                onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const BiomarkersScreen(),
-                    )),
+                onTap: () {
+                  Verifyotp();
+                },
                 child: Container(
                   padding: const EdgeInsets.fromLTRB(50, 15, 50, 15),
                   // margin: EdgeInsets.fromLTRB(80, 0, 80, 0),

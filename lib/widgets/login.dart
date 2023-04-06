@@ -27,9 +27,21 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   var myDataList = [];
+  var device_type = "1";
+  var device_id =
+      "dltb2TUnTuukuHW_T0yKXY:APA91bF0jOujprSUuLKLpNiNqncucj-yOuoVaR6r5bQDEWchIU_SGcUBj94W932vBLH10kHho__NnPS7K9z60Oe51ImOOtdAIzuWmqw6Ss3kX9Fm3TjkJ5iOk4ZWlIfbKlMqFNs_z64j";
+  var token =
+      "dltb2TUnTuukuHW_T0yKXY:APA91bF0jOujprSUuLKLpNiNqncucj-yOuoVaR6r5bQDEWchIU_SGcUBj94W932vBLH10kHho__NnPS7K9z60Oe51ImOOtdAIzuWmqw6Ss3kX9Fm3TjkJ5iOk4ZWlIfbKlMqFNs_z64j";
+  var uri = "http://52.58.203.6/staging/api/login";
   void LoginData() async {
-    var url = Uri.https('');
-    var response = await http.post(url, body: {});
+    var url = Uri.parse(uri);
+    var response = await http.post(url, body: {
+      "device_type": device_type.toString(),
+      "device_token": token.toString(),
+      "email": id.text,
+      "password": Pass.text,
+      "device_id": device_id.toString()
+    });
 
     print('Response status: ${response.statusCode}');
     print('Response body: ${response.body}');
@@ -37,7 +49,29 @@ class _LoginScreenState extends State<LoginScreen> {
     var myDataList = json.decode(response.body);
 
     Map<String, dynamic> mymap = json.decode(response.body);
-    myDataList = mymap["product_list"];
+    myDataList = mymap["data"];
+
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const OtpScreen(),
+        ));
+  }
+
+  void SendOtp() async {
+    var url = Uri.parse("http://52.58.203.6/staging/api/send_otp");
+    var response = await http.post(url, body: {
+      "email": id.text,
+      "password": Pass.text,
+    });
+
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+
+    var myDataList = json.decode(response.body);
+
+    Map<String, dynamic> mymap = json.decode(response.body);
+    myDataList = mymap["data"];
   }
 
   @override
@@ -107,11 +141,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 20,
                 ),
                 InkWell(
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const OtpScreen(),
-                      )),
+                  onTap: () {
+                    LoginData();
+                    SendOtp();
+                  },
                   child: Container(
                     padding: const EdgeInsets.fromLTRB(50, 15, 50, 15),
                     // margin: EdgeInsets.fromLTRB(80, 0, 80, 0),

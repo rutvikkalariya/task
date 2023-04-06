@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:rutvikkalariyatask/third.dart';
+import 'package:rutvikkalariyatask/widgets/third.dart';
 import 'package:rutvikkalariyatask/utils/color_util.dart';
 
-class VitaminScreen extends StatefulWidget {
-  const VitaminScreen({super.key});
+class SecondScreen extends StatefulWidget {
+  const SecondScreen({super.key});
 
   @override
-  State<VitaminScreen> createState() => _VitaminScreenState();
+  State<SecondScreen> createState() => _SecondScreenState();
 }
 
-class _VitaminScreenState extends State<VitaminScreen> {
+class _SecondScreenState extends State<SecondScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
